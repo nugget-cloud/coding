@@ -1,0 +1,16 @@
+SELECT 
+    c.email,
+    c.country,
+    COUNT(t.amount) AS transactions,
+    SUM(t.amount) AS total_amount,
+    ROUND(SUM(t.amount * co.commission), 2) AS total_commission
+FROM 
+    customers c
+JOIN 
+    transactions t ON c.id = t.customer_id
+JOIN 
+    countries co ON c.country = co.name
+GROUP BY 
+    c.email, c.country
+ORDER BY 
+    c.email ASC;
