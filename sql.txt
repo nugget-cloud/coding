@@ -1,16 +1,17 @@
 SELECT 
-    c.email,
-    c.country,
-    COUNT(t.amount) AS transactions,
-    SUM(t.amount) AS total_amount,
-    ROUND(SUM(t.amount * co.commission), 2) AS total_commission
+    f.name,
+    COUNT(cp.payment) AS total_payments,
+    MIN(cp.payment) AS min_payment,
+    MAX(cp.payment) AS max_payment,
+    ROUND(AVG(cp.payment), 2) AS avg_payment
 FROM 
-    customers c
-JOIN 
-    transactions t ON c.id = t.customer_id
-JOIN 
-    countries co ON c.country = co.name
+    funds f
+INNER JOIN 
+    coupon_payments cp ON f.id = cp.fund_id
 GROUP BY 
-    c.email, c.country
+    f.name
+HAVING 
+    AVG(cp.payment) > 500.00
 ORDER BY 
-    c.email ASC;
+    f.name ASC;
+
